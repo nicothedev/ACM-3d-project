@@ -1,0 +1,250 @@
+/*************************************************************************
+ * Author: Nicolas Feuchster
+ * Date:   08/12/2018
+ * Course: CSCI 143
+ * Partner: Worked alone
+ * Summary of File:
+ *    	 
+ *    	 The function of this file is to give you the building blocks to draw anything
+ *    	 you would like; be it 2d, 3d, blocky, straight or curvy.
+ *************************************************************************/
+
+package projects;
+
+import acm.program.*;
+import acm.graphics.*;
+import java.awt.Color;
+
+public class acmTest extends GraphicsProgram {
+
+    public void init() {
+   	 //sets screen size
+   	 setSize(1300, 800);
+
+    }// end of init
+
+    public void run() {
+   	 GPen pen = new GPen();
+   	 pen.showPen();
+
+   	 // draws a series of circles made of squares
+   	 for (int i = 0; i < 5; i += 2) {
+   		 drawCircleWithSquares(600, 160 - i, 1 + i / 2, 1 + i);
+   	 }
+
+   	 // draws a curved Lattice
+   	 for (int i = 0; i < 50; i++) {
+   		 sCurve(180 - i, 380 - i * 5, 30 - i, 30, 1);
+   	 }
+
+   	 // Draws a half cylinder
+   	 for (int i = 2; i < 200; i += 2) {
+   		 drawArc(50, 580 - i, 30, 10, 8);
+   	 }
+
+   	 // Draws a cylinder
+   	 for (int i = 0; i < 150; i += 2) {
+   		 drawCircle(680, 330 - i, 30, 10);
+   	 }
+
+   	 // Draws a pyramid
+   	 for (int i = 0; i < 100; i += 2) {
+   		 drawSquare(370 + i, 670 - i * 4, 200 - i * 2);
+   	 }
+
+   	 // Draws a tunnel like shape using squares
+   	 for (int i = 100; i >= 0; i -= 2) {
+   		 drawSquare(i + 870 + i / 2, 220 - i * 2, 100 - i);
+   	 }
+   	 
+   	 drawSphere(1190, 480, 3);
+   	 drawTriangle(600, 50, 20);
+   	 drawCube(800, 50, 20, 10);
+
+    }// end of run
+
+    // Draws an arc of a specific lenth and location using trig.
+    public void drawArc(int startX, int startY, double horizontalStretch, double verticalStretch, int arcLength) {
+   	 GPen pen = new GPen();
+
+   	 pen.setColor(Color.MAGENTA);
+   	 pen.hidePen();
+   	 add(pen, startX, startY);
+
+   	 double fullCircle = arcLength * (Math.PI / 8);
+   	 
+   	 //draws a curved length using trig
+   	 for (double degreeChange = 0; degreeChange <= fullCircle; degreeChange += Math.PI / 16) {
+   		 double x = Math.cos(degreeChange);
+   		 double y = Math.sin(degreeChange);
+
+   		 pen.drawLine(x * horizontalStretch, y * verticalStretch);
+
+   		 pause(1);
+   	 }
+    }
+
+    // draws a series of squares that comprises a circle.
+    public void drawCircleWithSquares(int startX, int startY, double horizontalStretch, double verticalStretch) {
+   	 GPen pen = new GPen();
+   	 double fullCircle = 2 * Math.PI;
+
+   	 // sets the colors
+   	 pen.setColor(Color.RED);
+   	 pen.hidePen();
+   	 add(pen, startX, startY);
+   	 pen.setFillColor(Color.BLUE);
+   	 pen.startFilledRegion();
+
+   	 //draws the circle using trig
+   	 for (double degreeChange = 0; degreeChange <= fullCircle; degreeChange += Math.PI / 16) {
+   		 double x = Math.cos(degreeChange) * horizontalStretch;
+   		 double y = Math.sin(degreeChange) * verticalStretch;
+   		 drawSquare(startX - 200 + startX * x / 10, startY + startY * y / 10,
+   				 (5 + (int) horizontalStretch + (int) verticalStretch));
+   		 pause(1);
+
+   	 }
+   	 pen.endFilledRegion();
+    }//end of drawCircleWithSquares
+
+    // Traverses a circle with a starting X and Y position. Able to control the
+    // horizontal and verticle stretch.
+    public void drawCircle(int startX, int startY, double horizontalStretch, double verticalStretch) {
+   	 GPen pen = new GPen();
+
+   	 // sets the colors
+   	 pen.setColor(Color.RED);
+   	 pen.hidePen();
+   	 add(pen, startX, startY);
+   	 pen.setFillColor(Color.BLUE);
+   	 pen.startFilledRegion();
+
+   	 double fullCircle = 2 * Math.PI;
+   	 //draws the circle using trig
+   	 for (double degreeChange = 0; degreeChange <= fullCircle; degreeChange += Math.PI / 16) {
+   		 double x = Math.cos(degreeChange);
+   		 double y = Math.sin(degreeChange);
+
+   		 pen.drawLine(x * horizontalStretch, y * verticalStretch);
+   		 pause(1);
+   	 }
+   	 pen.endFilledRegion();
+    }// end of drawCircle
+
+    // draws a standard triangle with a starting x and y position and controlable
+    // length.
+    public void drawTriangle(int startX, int startY, int length) {
+   	 GPen pen = new GPen();
+
+   	 add(pen, startX, startY);
+   	 pen.drawLine(length, length);
+   	 pen.drawLine(length, -length);
+   	 pen.drawLine(-(length * 2), 0);
+
+    }// end of drawTriangle
+
+    // draws a standard quare with a starting x and y position and are able to
+    // control the size.
+    public void drawSquare(double startx, double starty, int sideLength) {
+   	 GPen pen = new GPen();
+
+   	 pen.setColor(Color.BLUE);
+   	 add(pen, startx, starty);
+   	 pen.setFillColor(Color.black);
+   	 pen.startFilledRegion();
+
+   	 pen.drawLine(sideLength, 0);
+   	 pause(1);
+   	 pen.drawLine(0, -sideLength);
+   	 pause(1);
+   	 pen.drawLine(-sideLength, 0);
+   	 pause(1);
+   	 pen.drawLine(0, sideLength);
+   	 pause(1);
+
+   	 pen.endFilledRegion();
+
+    }// end of drawSquare
+
+    // draws 2 squares and connects them using the zlength argument.
+    public void drawCube(int startx, int starty, int sideLength, int zlength) {
+
+   	 GPen pen = new GPen();
+
+   	 this.drawSquare(startx, starty, sideLength);
+   	 this.drawSquare(startx + zlength, starty + zlength, sideLength);
+
+   	 add(pen, startx, starty);
+   	 pen.drawLine(zlength, zlength);
+
+   	 add(pen, startx + sideLength, starty);
+   	 pen.drawLine(zlength, zlength);
+
+   	 add(pen, startx, starty - sideLength);
+   	 pen.drawLine(zlength, zlength);
+
+   	 add(pen, startx + sideLength, starty - sideLength);
+   	 pen.drawLine(zlength, zlength);
+
+    }// end of drawCube
+
+    // this method draws 2 curves that comprise an S shape.
+    public void sCurve(int startx, int starty, double horizontalStretch, double verticalStretch, int arcLength) {
+   	 GPen pen = new GPen();
+   	 GPen pen2 = new GPen();
+
+   	 pen.setColor(Color.RED);
+   	 pen2.setColor(Color.BLUE);
+   	 pen2.hidePen();
+   	 pen.hidePen();
+   	 add(pen, startx, starty);
+
+   	 pen.setFillColor(Color.BLUE);
+   	 pen.startFilledRegion();
+
+   	 // draws the first curve of the S.
+   	 for (double degreeChange = 0; degreeChange <= Math.PI / 2; degreeChange += Math.PI / 16) {
+   		 double x = Math.cos(degreeChange);
+   		 double y = Math.sin(degreeChange);
+
+   		 pen.drawLine(x * horizontalStretch, y * verticalStretch);
+
+   		 pause(1);
+
+   		 // adds second pen to the end of the first pen
+   		 if (degreeChange == Math.PI / 2) {
+   			 add(pen2, startx + x, starty + y);
+   		 }
+   	 }
+
+   	 // starts to draw the second curve where the last one ends.
+   	 // this curve is a mirror of the first curve
+   	 for (double degreeChange = Math.PI; degreeChange <= 3 * Math.PI / 2; degreeChange += Math.PI / 16) {
+   		 double x = Math.cos(degreeChange);
+   		 double y = Math.sin(degreeChange);
+   		 pen2.drawLine(x * horizontalStretch, y * verticalStretch);
+   		 pause(1);
+   	 }
+    }// end of sCurve methid
+
+    // recursively places spheres
+    public void drawSphere(int startX, int startY, int count) {
+   	 if (count == 0) {
+   		 return;
+   	 } else {
+   		 // Draws the sphere
+   		 for (int i = 0; i < 41; i++) {
+   			 drawArc(startX, startY, 20 - i, 20, 8);
+   		 }
+   		 // places the sphears next to eachother by changing the starting position
+   		 // 1 sphere width apart of the x and y.
+   		 drawSphere(startX - 226, startY, count - 1);
+   		 drawSphere(startX, startY - 226, count - 1);
+   	 } // end of else
+
+    }// end of drawSphere
+
+}// end of class
+
+
